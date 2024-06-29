@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Chap Mali | Commander</title>
+    <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300i,400,400i,500,500i,600,600i,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap4/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/owl-carousel/assets/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/slick/slick/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/lightGallery-master/dist/css/lightgallery.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/jquery-ui/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/select2/dist/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/chikery-icon/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .product-order-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .product-order-card:hover {
+            transform: scale(1.05);
+        }
+        .product-order-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product-order-card h3 {
+            font-size: 2em;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .product-order-card p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        .product-order-card .price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-top: 10px;
+        }
+        .order-form-heading {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .order-form-heading h2 {
+            font-size: 3em;
+            font-weight: 700;
+        }
+        .order-btn {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-family: 'Cormorant Garamond', serif;
+        }
+    </style>
+</head>
+<body>
+    <header class="header header--default header--home-4 line" data-sticky="true">
+        <div class="header__center">
+            <div class="header__logo">
+                <a class="ps-logo" href="{% url 'home' %}"><img src="{% static '/img/ChapMali.jpg' %}" alt="Chap Mali"></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="order-form-heading">
+            <h2>Commander</h2>
+        </div>
+        <div class="ps-product-box">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-order-card">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="product-order-card">
+                        <h3>{{ product.name }}</h3>
+                        <div class="price">{{ product.price }} FCFA</div>
+                        <p>{{ product.description }}</p>
+                        <form method="post" action="{% url 'order_product' product.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="quantity">Quantité :</label>
+                                <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="{{ product.min_quantity }}" required oninput="updateTotalPrice()">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_name">Nom :</label>
+                                <input type="text" id="customer_name" name="customer_name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_phone">Téléphone :</label>
+                                <input type="text" id="customer_phone" name="customer_phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_address">Adresse :</label>
+                                <textarea id="customer_address" name="customer_address" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="total_price">Prix Total :</label>
+                                <input type="text" id="total_price" name="total_price" class="form-control" readonly>
+                            </div>
+                            <button type="submit" class="btn btn-primary order-btn">Commander</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="ps-footer ps-footer--light">
+        <div class="ps-footer__bottom">
+            <div class="container">
+                <ul class="ps-list--social">
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                    <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+                </ul>
+                <p><a href="https://www.templateshub.net" target="_blank">Templates Hub</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Plugins-->
+    <script src="{% static 'plugins/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'plugins/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap4/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'plugins/imagesloaded.pkgd.js' %}"></script>
+    <script src="{% static 'plugins/masonry.pkgd.min.js' %}"></script>
+    <script src="{% static 'plugins/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery.matchHeight-min.js' %}"></script>
+    <script src="{% static 'plugins/slick/slick/slick.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-bar-rating/dist/jquery.barrating.min.js' %}"></script>
+    <script src="{% static 'plugins/slick-animation.min.js' %}"></script>
+    <script src="{% static 'plugins/lightGallery-master/dist/js/lightgallery-all.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'plugins/sticky-sidebar/dist/sticky-sidebar.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'plugins/select2/dist/js/select2.full.min.js' %}"></script>
+    <script src="{% static 'plugins/gmap3.min.js' %}"></script>
+    <!-- Custom scripts-->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        function updateTotalPrice() {
+            const quantity = document.getElementById('quantity').value;
+            const price = {{ product.price }};
+            const totalPrice = quantity * price;
+            document.getElementById('total_price').value = totalPrice + ' FCFA';
+        }
+
+        // Initial call to set total price
+        updateTotalPrice();
+    </script>
+</body>
+</html>

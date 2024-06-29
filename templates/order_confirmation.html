@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Confirmation de Commande</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ce873a; (14, 113, 14, 0.9);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .order-details {
+            margin-bottom: 20px;
+        }
+        .order-details p {
+            font-size: 18px;
+            color: #ce873a; 
+        }
+        .btn-download, .btn-home {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-download {
+            background-color: #ce873a; 
+            margin-bottom: 10px;
+        }
+        .btn-download:hover {
+            background-color: #ce873a; 
+        }
+        .btn-home {
+            background-color: #ce873a; 
+        }
+        .btn-home:hover {
+            background-color: #ce873a; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Confirmation de Commande</h1>
+    <div class="order-details">
+        <p>Merci, {{ order.customer_name }}! Votre commande pour {{ order.product.name }} a été confirmée.</p>
+        <p>Quantité: {{ order.quantity }}</p>
+        <p>Prix Total: {{ order.total_price }} XOF</p>
+    </div>
+    <button class="btn-download" onclick="generatePDF()">Télécharger la Facture</button>
+    <a href="{% url 'home' %}" class="btn-home">Accueil</a>
+</div>
+
+<script>
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Couleurs de la société
+    const primaryColor = "#ce873a ";
+    const secondaryColor = "#ce873a ";
+
+    // Ajouter un logo
+    const imgData = '{% static "img/ChapMali.jpg" %}';
+    doc.addImage(imgData, 'JPEG', 15, 15, 50, 50);
+
+    // En-tête de la facture
+    doc.setFontSize(18);
+    doc.setTextColor(primaryColor);
+    doc.text('Facture commande confirmée', 105, 80, null, null, 'center');
+
+    // Informations de l'entreprise
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Adresse: Zone industrielle de Titibougou, Bamako, Mali', 20, 110);
+    doc.text('Téléphone: +223 71 98 64 74 / 71 29 29 34', 20, 120);
+
+    // Informations du client
+    doc.setFontSize(13);
+    doc.text('Facturé à:', 20, 140);
+    doc.text('{{ order.customer_name }}', 20, 150);
+
+    // Date et Heure
+    doc.text('Date de commande: ' + new Date().toLocaleDateString('fr-FR') + ' ' + new Date().toLocaleTimeString('fr-FR'), 20, 160);
+
+    // Lignes pour le tableau
+    doc.setFontSize(11);
+    doc.setTextColor(primaryColor);
+    doc.text('Produit', 20, 180);
+    doc.text('Quantité', 80, 180);
+    doc.text('Prix Unitaire', 120, 180);
+    doc.text('Prix Total', 160, 180);
+
+    doc.setDrawColor(primaryColor);
+    doc.line(20, 185, 190, 185); // Ligne horizontale sous les titres
+
+    // Détails de la commande
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text('{{ order.product.name }}', 20, 195);
+    doc.text('{{ order.quantity }}', 80, 195);
+    doc.text('{{ order.product.price }} XOF', 120, 195);
+    doc.text('{{ order.total_price }} XOF', 160, 195);
+
+    // Ajouter une bordure colorée
+    doc.setDrawColor(secondaryColor);
+    doc.setLineWidth(1.5);
+    doc.rect(10, 10, 190, 277, 'S');
+
+    // Sauvegarder le PDF
+    doc.save('Facture_chapmali.pdf');
+}
+</script>
+
+</body>
+</html>

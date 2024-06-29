@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Chap Mali | Détail du Produit</title>
+    <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:300i,400,400i,500,500i,600,600i,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap4/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/owl-carousel/assets/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/slick/slick/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/lightGallery-master/dist/css/lightgallery.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/jquery-ui/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/select2/dist/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/chikery-icon/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .product-detail-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .product-detail-card:hover {
+            transform: scale(1.05);
+        }
+        .product-detail-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product-detail-card h3 {
+            font-size: 2em;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .product-detail-card p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        .product-detail-card .price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-top: 10px;
+        }
+        .product-detail-heading {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .product-detail-heading h2 {
+            font-size: 3em;
+            font-weight: 700;
+        }
+        .order-btn {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .cart-btn {
+            margin-top: 10px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+       
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'about' %}">À propos <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'product_list' %}">Produits <span class="sr-only">(current)</span></a>
+                </li>
+                
+                <!-- Ajoutez d'autres liens ici -->
+            </ul>
+        </div>
+    </nav>
+    <header class="header header--default header--home-4 line" data-sticky="true">
+        <div class="header__center">
+            <div class="header__logo">
+                <a class="ps-logo" href="{% url 'home' %}"><img src="{% static 'img/ChapMali.jpg' %}" alt="Chap Mali"></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="product-detail-heading">
+            <h2>Détail du Produit</h2>
+        </div>
+        <div class="ps-product-box">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-detail-card">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="product-detail-card">
+                        <h3>{{ product.name }}</h3>
+                        <div class="price">{{ product.price }} FCFA</div>
+                        <p>{{ product.description }}</p>
+                        <a href="{% url 'order_product' product.id %}" class="btn btn-primary order-btn">Commander</a>
+                        <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success cart-btn">Ajouter au panier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="ps-footer ps-footer--light">
+        <div class="ps-footer__bottom">
+            <div class="container">
+                <ul class="ps-list--social">
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                    <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+                </ul>
+                <p></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Plugins-->
+    <script src="{% static 'plugins/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'plugins/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap4/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'plugins/imagesloaded.pkgd.js' %}"></script>
+    <script src="{% static 'plugins/masonry.pkgd.min.js' %}"></script>
+    <script src="{% static 'plugins/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery.matchHeight-min.js' %}"></script>
+    <script src="{% static 'plugins/slick/slick/slick.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-bar-rating/dist/jquery.barrating.min.js' %}"></script>
+    <script src="{% static 'plugins/slick-animation.min.js' %}"></script>
+    <script src="{% static 'plugins/lightGallery-master/dist/js/lightgallery-all.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'plugins/sticky-sidebar/dist/sticky-sidebar.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'plugins/select2/dist/js/select2.full.min.js' %}"></script>
+    <script src="{% static 'plugins/gmap3.min.js' %}"></script>
+    <!-- Custom scripts-->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
