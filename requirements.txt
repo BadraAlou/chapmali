@@ -6,7 +6,7 @@ fpdf==1.7.2
 gunicorn==22.0.0
 packaging==24.1
 Pillow==9.2.0
-psycopg2-binary==2.9.6
+#psycopg2-binary==2.9.6
 python-decouple==3.8
 reportlab==4.2.2
 sqlparse==0.4.4
